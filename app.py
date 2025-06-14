@@ -9,7 +9,7 @@ with open("diabetes_model.pkl", "rb") as f:
 
 # Create main window
 root = tk.Tk()
-root.title("Diabetes Prediction App")
+root.title("Diapredict")
 
 # Window size
 root.geometry("400x500")
