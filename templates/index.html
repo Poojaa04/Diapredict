@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Diapredict - Diabetes Prediction</title>
- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="container">
@@ -11,35 +11,35 @@
     <form id="predict-form">
       <div class="form-grid">
         <label>Pregnancies
-          <input name="Pregnancies" placeholder="" required />
+          <input name="Pregnancies" id="pregnancies" required />
         </label>
 
         <label>Glucose
-          <input name="Glucose" placeholder="" required />
+          <input name="Glucose" id="glucose" required />
         </label>
 
         <label>Blood Pressure
-          <input name="BloodPressure" placeholder="" required />
+          <input name="BloodPressure" id="bloodPressure" required />
         </label>
 
         <label>Skin Thickness
-          <input name="SkinThickness" placeholder="" required />
+          <input name="SkinThickness" id="skinThickness" required />
         </label>
 
         <label>Insulin
-          <input name="Insulin" placeholder="" required />
+          <input name="Insulin" id="insulin" required />
         </label>
 
         <label>BMI
-          <input name="BMI" placeholder="" required />
+          <input name="BMI" id="bmi" required />
         </label>
 
         <label>Diabetes Pedigree Function
-          <input name="DiabetesPedigreeFunction" placeholder="" required />
+          <input name="DiabetesPedigreeFunction" id="dpf" required />
         </label>
 
         <label>Age
-          <input name="Age" placeholder="" required />
+          <input name="Age" id="age" required />
         </label>
       </div>
       <button type="submit">Predict</button>
@@ -47,11 +47,11 @@
     <div id="result"></div>
   </div>
 
- <script>
-document.querySelector("form").addEventListener("submit", async function (e) {
-    e.preventDefault();
+  <script>
+    document.querySelector("form").addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-    const data = {
+      const data = {
         Pregnancies: document.getElementById("pregnancies").value,
         Glucose: document.getElementById("glucose").value,
         BloodPressure: document.getElementById("bloodPressure").value,
@@ -60,26 +60,25 @@ document.querySelector("form").addEventListener("submit", async function (e) {
         BMI: document.getElementById("bmi").value,
         DiabetesPedigreeFunction: document.getElementById("dpf").value,
         Age: document.getElementById("age").value
-    };
+      };
 
-    try {
+      try {
         const response = await fetch("/predict", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
 
         const result = await response.json();
         console.log("Response:", result);
         document.getElementById("result").textContent = result.prediction;
-    } catch (error) {
+      } catch (error) {
         console.error("Error during fetch:", error);
         document.getElementById("result").textContent = "Something went wrong!";
-    }
-});
-</script>
-
+      }
+    });
+  </script>
 </body>
 </html>
