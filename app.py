@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pickle
 import numpy as np
@@ -13,7 +13,7 @@ with open("diabetes_model.pkl", "rb") as f:
 
 @app.route("/")
 def home():
-    return "Diapredict is running!"
+    return render_template("index.html")  
 
 @app.route("/predict", methods=["POST"])
 def predict():
