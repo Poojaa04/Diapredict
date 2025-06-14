@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diapredict - Diabetes Prediction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Diapredict - Diabetes Prediction</h1>
+    <form id="predict-form">
+      <div class="form-grid">
+        <label>Pregnancies
+          <input name="Pregnancies" placeholder="" required />
+        </label>
+
+        <label>Glucose
+          <input name="Glucose" placeholder="" required />
+        </label>
+
+        <label>Blood Pressure
+          <input name="BloodPressure" placeholder="" required />
+        </label>
+
+        <label>Skin Thickness
+          <input name="SkinThickness" placeholder="" required />
+        </label>
+
+        <label>Insulin
+          <input name="Insulin" placeholder="" required />
+        </label>
+
+        <label>BMI
+          <input name="BMI" placeholder="" required />
+        </label>
+
+        <label>Diabetes Pedigree Function
+          <input name="DiabetesPedigreeFunction" placeholder="" required />
+        </label>
+
+        <label>Age
+          <input name="Age" placeholder="" required />
+        </label>
+      </div>
+      <button type="submit">Predict</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+ <script>
+    document.getElementById("predict-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log(result); 
+
+        const resultDiv = document.getElementById("result");
+
+        if (result.prediction === "You have diabetes") {
+          resultDiv.innerText = result.prediction;
+          resultDiv.style.color = "red";
+        } else if (result.prediction === "You don't have diabetes") {
+          resultDiv.innerText = result.prediction;
+          resultDiv.style.color = "green";
+        } else {
+          resultDiv.innerText = result.error || "Unexpected result";
+          resultDiv.style.color = "orange";
+        }
+      } catch (err) {
+        document.getElementById("result").innerText = "Server error. Try again.";
+        document.getElementById("result").style.color = "orange";
+      }
+    });
+  </script>
+</body>
+</html>
