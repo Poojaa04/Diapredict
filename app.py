@@ -1,5 +1,5 @@
-# app.py (Flask version)
-from flask import Flask, request, jsonify, render_template
+import os
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pickle
 import numpy as np
@@ -7,13 +7,13 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-# Load your model
+# Load model
 with open("diabetes_model.pkl", "rb") as f:
     model = pickle.load(f)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "Diapredict is running!"
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -27,4 +27,5 @@ def predict():
     return jsonify({"prediction": "You have diabetes" if result == 1 else "You don't have diabetes"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
