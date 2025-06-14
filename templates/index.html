@@ -48,37 +48,50 @@
   </div>
 
   <script>
-    document.querySelector("form").addEventListener("submit", async function (e) {
-      e.preventDefault();
+  document.querySelector("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const data = {
-        Pregnancies: document.getElementById("pregnancies").value,
-        Glucose: document.getElementById("glucose").value,
-        BloodPressure: document.getElementById("bloodPressure").value,
-        SkinThickness: document.getElementById("skinThickness").value,
-        Insulin: document.getElementById("insulin").value,
-        BMI: document.getElementById("bmi").value,
-        DiabetesPedigreeFunction: document.getElementById("dpf").value,
-        Age: document.getElementById("age").value
-      };
+    const data = {
+      Pregnancies: document.getElementById("pregnancies").value,
+      Glucose: document.getElementById("glucose").value,
+      BloodPressure: document.getElementById("bloodPressure").value,
+      SkinThickness: document.getElementById("skinThickness").value,
+      Insulin: document.getElementById("insulin").value,
+      BMI: document.getElementById("bmi").value,
+      DiabetesPedigreeFunction: document.getElementById("dpf").value,
+      Age: document.getElementById("age").value
+    };
 
-      try {
-        const response = await fetch("/predict", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+    try {
+      const response = await fetch("/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
 
-        const result = await response.json();
-        console.log("Response:", result);
-        document.getElementById("result").textContent = result.prediction;
-      } catch (error) {
-        console.error("Error during fetch:", error);
-        document.getElementById("result").textContent = "Something went wrong!";
+      const result = await response.json();
+      console.log("Response:", result);
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = result.prediction;
+
+      // Set color based on result
+      if (result.prediction.toLowerCase().includes("don't") || result.prediction.toLowerCase().includes("no")) {
+        resultDiv.style.color = "green";
+      } else {
+        resultDiv.style.color = "red";
       }
-    });
-  </script>
+
+    } catch (error) {
+      console.error("Error during fetch:", error);
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = "Something went wrong!";
+      resultDiv.style.color = "black";
+    }
+  });
+</script>
+
 </body>
 </html>
